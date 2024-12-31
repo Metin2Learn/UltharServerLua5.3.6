@@ -1,5 +1,5 @@
 /*
-** $Id: ldebug.h,v 1.32 2002/11/18 11:01:55 roberto Exp $
+** $Id: ldebug.h,v 2.14.1.1 2017/04/19 17:20:42 roberto Exp $
 ** Auxiliary functions from Debug Interface module
 ** See Copyright Notice in lua.h
 */
@@ -13,19 +13,27 @@
 
 #define pcRel(pc, p)	(cast(int, (pc) - (p)->code) - 1)
 
-#define getline(f,pc)	(((f)->lineinfo) ? (f)->lineinfo[pc] : 0)
+#define getfuncline(f,pc)	(((f)->lineinfo) ? (f)->lineinfo[pc] : -1)
 
 #define resethookcount(L)	(L->hookcount = L->basehookcount)
 
 
-void luaG_inithooks (lua_State *L);
-void luaG_typeerror (lua_State *L, const TObject *o, const char *opname);
-void luaG_concaterror (lua_State *L, StkId p1, StkId p2);
-void luaG_aritherror (lua_State *L, const TObject *p1, const TObject *p2);
-int luaG_ordererror (lua_State *L, const TObject *p1, const TObject *p2);
-void luaG_runerror (lua_State *L, const char *fmt, ...);
-void luaG_errormsg (lua_State *L);
-int luaG_checkcode (const Proto *pt);
+LUAI_FUNC l_noret luaG_typeerror (lua_State *L, const TValue *o,
+                                                const char *opname);
+LUAI_FUNC l_noret luaG_concaterror (lua_State *L, const TValue *p1,
+                                                  const TValue *p2);
+LUAI_FUNC l_noret luaG_opinterror (lua_State *L, const TValue *p1,
+                                                 const TValue *p2,
+                                                 const char *msg);
+LUAI_FUNC l_noret luaG_tointerror (lua_State *L, const TValue *p1,
+                                                 const TValue *p2);
+LUAI_FUNC l_noret luaG_ordererror (lua_State *L, const TValue *p1,
+                                                 const TValue *p2);
+LUAI_FUNC l_noret luaG_runerror (lua_State *L, const char *fmt, ...);
+LUAI_FUNC const char *luaG_addinfo (lua_State *L, const char *msg,
+                                                  TString *src, int line);
+LUAI_FUNC l_noret luaG_errormsg (lua_State *L);
+LUAI_FUNC void luaG_traceexec (lua_State *L);
 
 
 #endif
