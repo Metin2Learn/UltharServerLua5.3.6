@@ -6,22 +6,31 @@ include $(LUA)/config
 
 EXTRA_DEFS= $(POPEN) $(TMPNAM) $(DEGREES) $(LOADLIB)
 
-OBJS= lauxlib.o lbaselib.o ldblib.o liolib.o lmathlib.o ltablib.o lstrlib.o loadlib.o
-SRCS= lauxlib.c lbaselib.c ldblib.c liolib.c lmathlib.c ltablib.c lstrlib.c loadlib.c
+# 自动查找所有 .c 文件
+SRCS=$(wildcard *.c)
 
+# 自动生成对应的 .o 文件
+OBJS=$(SRCS:.c=.o)
+
+# 生成的静态库
 T= $(LIB)/liblualib.a
 
-all:	$T
+# 默认目标
+all:	$(T)
 
-$T:	$(OBJS)
+# 生成静态库
+$(T):	$(OBJS)
 	$(AR) $@ $(OBJS)
 	$(RANLIB) $@
 
+# 清理目标
 clean:
-	rm -f $(OBJS) $T
+	rm -f $(OBJS) $(T)
 
+# 使用 `co` 版本控制工具
 co:
 	co -q -f -M $(SRCS)
 
+# 删除源文件
 klean:	clean
 	rm -f $(SRCS)
