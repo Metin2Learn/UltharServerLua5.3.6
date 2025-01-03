@@ -4,7 +4,7 @@ LUA= ..
 
 include $(LUA)/config
 
-SRCS= lua.h lualib.h lauxlib.h
+SRCS= SRCS= lua.h lualib.h lauxlib.h luaconf.h
 
 all:
 
